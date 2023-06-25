@@ -1,9 +1,8 @@
 name: Build and Deploy to Netlify
 on:
   # push:
-  pull_request:
-    branches:
-      - master
+  pull_request_review:
+    types: [submitted]
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -21,7 +20,7 @@ jobs:
         run: yarn build
   
       - name: Deploy to Netlify
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: github.event.review.state == 'approved'
         uses: nwtgck/actions-netlify@v2.0
         with:
           publish-dir: './dist'
